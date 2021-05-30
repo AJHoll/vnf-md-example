@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { DocCard, DocItemCard, DocItemDetail, DocList } from 'src/datasets';
 import { query } from '../controller';
 import { Request } from '../controller/classes/Request';
+import { CreateDocDto } from './dto/create-doc.dto';
+import { UpdateDocDto } from './dto/update-doc.dto';
 
 export type Doc = {
   id: Number;
@@ -27,6 +29,7 @@ export class DocService {
   docItemDetail: DocItemDetail = new DocItemDetail(this);
   docItemCard: DocItemCard = new DocItemCard(this);
 
+  // DOC
   async getAllDoc(): Promise<Doc[]> {
     const payload = await query(
       new Request(this.docList.operations.selectData),
@@ -56,6 +59,37 @@ export class DocService {
     };
   }
 
+  async createDoc(createDocDto: CreateDocDto): Promise<void> {
+    const requests = [
+      new Request(this.docCard.operations.insertRecord, true),
+      new Request(this.docCard.operations.updateRecord, true, {
+        id: '$(id)',
+        number: createDocDto.number,
+        date: createDocDto.date,
+        description: createDocDto.description,
+      }),
+    ];
+    await query(requests);
+  }
+
+  async updateDoc(updateDocDto: UpdateDocDto): Promise<void> {
+    await query(
+      new Request(this.docCard.operations.updateRecord, true, {
+        id: updateDocDto.id,
+        number: updateDocDto.number,
+        date: updateDocDto.date,
+        description: updateDocDto.description,
+      }),
+    );
+  }
+
+  async deleteDoc(idDoc: number): Promise<void> {
+    await query(
+      new Request(this.docList.operations.deleteRecord, true, { id: idDoc }),
+    );
+  }
+
+  // DOC_ITEM
   async getAllDocItem(idDoc: number): Promise<DocItem[]> {
     const payload = await query(
       new Request(this.docItemDetail.operations.selectData, false, {

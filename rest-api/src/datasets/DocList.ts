@@ -12,6 +12,10 @@ export default class DocList implements IDataset {
                 from cmn_doc.doc doc`,
         bindingParams: {},
       },
+      deleteRecord: {
+        query: `select cmn_doc.doc__delete_record($(id))`,
+        bindingParams: { id: null },
+      },
     };
   }
 }

@@ -12,6 +12,21 @@ export default class DocCard implements IDataset {
                 where doc.id = $(id)`,
         bindingParams: { id: null },
       },
+      insertRecord: {
+        query: `select cmn_doc.doc__insert_record() as id`,
+        bindingParams: {},
+      },
+      updateRecord: {
+        query: `select cmn_doc.doc__set_number($(id), $(number))
+                      ,cmn_doc.doc__set_date($(id),$(date))
+                      ,cmn_doc.doc__set_description($(id), $(description))`,
+        bindingParams: {
+          id: null,
+          number: null,
+          date: null,
+          description: null,
+        },
+      },
     };
   }
 }
