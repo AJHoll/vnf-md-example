@@ -56,7 +56,7 @@ export class DocService {
     };
   }
 
-  async getAllDocItem(idDoc: number): Promise<DocItem[] | any> {
+  async getAllDocItem(idDoc: number): Promise<DocItem[]> {
     const payload = await query(
       new Request(this.docItemDetail.operations.selectData, false, {
         idDoc: idDoc,
