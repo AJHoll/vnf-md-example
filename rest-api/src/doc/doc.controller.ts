@@ -10,8 +10,8 @@ export class DocController {
     return this.docService.getAllDoc();
   }
 
-  @Get('/:id')
-  async getOneDoc(@Param('id') id): Promise<any> {
-    return this.docService.getOneDoc(+id);
+  @Get('/:idDoc')
+  async getOneDoc(@Param('idDoc') idDoc): Promise<any> {
+    return this.docService.getOneDoc(+idDoc);
   }
 }

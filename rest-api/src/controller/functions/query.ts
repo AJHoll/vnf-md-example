@@ -32,14 +32,20 @@ const chainingQuery = (bindingParams: any, prevPayload: any) => {
   return bindings;
 };
 
-const query = async (req: Request[]): Promise<ICallbackMessage> => {
+const query = async (req: Request[] | Request): Promise<ICallbackMessage> => {
   const conn: IDatabase<{}, IClient> = anyGlobal.uniParams.pool.mainConnection;
+  let requests: Request[];
+  if ((req as Request[]).length > 1) {
+    requests = req as Request[];
+  } else {
+    requests = [req as Request];
+  }
   try {
     let data: any = [];
-    if (req[0].useTransaction) {
+    if (requests[0].useTransaction) {
       data = await conn.tx(async (trans) => {
         let subData: any = [];
-        for (let request of req) {
+        for (let request of requests) {
           request.bindingParams = chainingQuery(request.bindingParams, subData);
           const unitData = await trans.any(
             request.operation.query,
@@ -50,7 +56,7 @@ const query = async (req: Request[]): Promise<ICallbackMessage> => {
         return subData;
       });
     } else {
-      for (let request of req) {
+      for (let request of requests) {
         request.bindingParams = chainingQuery(request.bindingParams, data);
         const unitData: any = await conn.any(
           request.operation.query,
