@@ -7,13 +7,7 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import {
-  Doc,
-  DocItem,
-  DocService,
-  SuccessData,
-  ErrorData,
-} from './doc.service';
+import { DocService, SuccessData, ErrorData } from './doc.service';
 import { CreateDocItemDto } from './dto/create-doc-item.dto';
 import { CreateDocDto } from './dto/create-doc.dto';
 import { UpdateDocItemDto } from './dto/update-doc-item.dto';
