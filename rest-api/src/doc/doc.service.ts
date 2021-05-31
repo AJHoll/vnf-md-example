@@ -2,7 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { DocCard, DocItemCard, DocItemDetail, DocList } from 'src/datasets';
 import { query } from '../controller';
 import { Request } from '../controller/classes/Request';
+import { CreateDocItemDto } from './dto/create-doc-item.dto';
 import { CreateDocDto } from './dto/create-doc.dto';
+import { UpdateDocItemDto } from './dto/update-doc-item.dto';
 import { UpdateDocDto } from './dto/update-doc.dto';
 
 export type Doc = {
@@ -124,5 +126,36 @@ export class DocService {
       sum: item?.f_sum,
       order: item?.n_order,
     };
+  }
+
+  async createDocItem(createDocItemDto: CreateDocItemDto): Promise<void> {
+    console.log(createDocItemDto);
+    const requests = [
+      new Request(this.docItemCard.operations.insertRecord, true, {
+        idDoc: createDocItemDto.doc,
+      }),
+      new Request(this.docItemCard.operations.updateRecord, true, {
+        id: '$(id)',
+        idDoc: createDocItemDto.doc,
+        number: createDocItemDto.number,
+        caption: createDocItemDto.caption,
+        sum: createDocItemDto.sum,
+      }),
+    ];
+
+    await query(requests);
+  }
+
+  async updateDocItem(updateDocItemDto: UpdateDocItemDto): Promise<void> {
+    await query(
+      new Request(this.docItemCard.operations.updateRecord, true, {
+        id: updateDocItemDto.id,
+        idDoc: updateDocItemDto.doc,
+        number: updateDocItemDto.number,
+        caption: updateDocItemDto.caption,
+        sum: updateDocItemDto.sum,
+        order: updateDocItemDto.order,
+      }),
+    );
   }
 }

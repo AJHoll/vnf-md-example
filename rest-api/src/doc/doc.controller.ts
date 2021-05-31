@@ -8,7 +8,9 @@ import {
   Post,
 } from '@nestjs/common';
 import { Doc, DocItem, DocService } from './doc.service';
+import { CreateDocItemDto } from './dto/create-doc-item.dto';
 import { CreateDocDto } from './dto/create-doc.dto';
+import { UpdateDocItemDto } from './dto/update-doc-item.dto';
 import { UpdateDocDto } from './dto/update-doc.dto';
 
 @Controller('doc')
@@ -53,5 +55,25 @@ export class DocController {
     @Param('idDocItem') idDocItem,
   ): Promise<DocItem> {
     return this.docService.getOneDocItem(+idDoc, +idDocItem);
+  }
+
+  @Post('/:idDoc/item')
+  async createDocItem(
+    @Param('idDoc') idDoc: number,
+    @Body() createDocItemDto: CreateDocItemDto,
+  ): Promise<void> {
+    createDocItemDto.doc = idDoc;
+    return this.docService.createDocItem(createDocItemDto);
+  }
+
+  @Patch('/:idDoc/item/:idDocItem')
+  async updateDocItem(
+    @Param('idDoc') idDoc: number,
+    @Param('idDocItem') idDocItem: number,
+    @Body() updateDocItemDto: UpdateDocItemDto,
+  ): Promise<void> {
+    updateDocItemDto.doc = idDoc;
+    updateDocItemDto.id = idDocItem;
+    return this.docService.updateDocItem(updateDocItemDto);
   }
 }

@@ -19,7 +19,8 @@ export default class DocCard implements IDataset {
       updateRecord: {
         query: `select cmn_doc.doc__set_number($(id), $(number))
                       ,cmn_doc.doc__set_date($(id),$(date))
-                      ,cmn_doc.doc__set_description($(id), $(description))`,
+                      ,cmn_doc.doc__set_description($(id), $(description))
+                      ,cmn_doc.doc__after_edit($(id))`,
         bindingParams: {
           id: null,
           number: null,
