@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ICallbackMessageStatus } from 'src/controller/interfaces';
 import { DocCard, DocItemCard, DocItemDetail, DocList } from 'src/datasets';
 import { query } from '../controller';
 import { Request } from '../controller/classes/Request';
@@ -24,6 +25,16 @@ export type DocItem = {
   order: Number;
 };
 
+export type ErrorData = {
+  status: ICallbackMessageStatus;
+  error: any;
+};
+
+export type SuccessData = {
+  status: ICallbackMessageStatus;
+  data?: Doc | DocItem | Doc[] | DocItem[];
+};
+
 @Injectable()
 export class DocService {
   docList: DocList = new DocList(this);
@@ -32,36 +43,50 @@ export class DocService {
   docItemCard: DocItemCard = new DocItemCard(this);
 
   // DOC
-  async getAllDoc(): Promise<Doc[]> {
+  async getAllDoc(): Promise<SuccessData | ErrorData> {
     const payload = await query(
       new Request(this.docList.operations.selectData),
     );
-    return payload.data.map((item) => {
+    if (payload.status === ICallbackMessageStatus.Done) {
       return {
-        id: item.id,
-        number: item.s_number,
-        date: item.d_date,
-        sum: item.f_sum,
-        description: item.s_description,
+        status: payload.status,
+        data: payload.data.map((item) => {
+          return {
+            id: item.id,
+            number: item.s_number,
+            date: item.d_date,
+            sum: item.f_sum,
+            description: item.s_description,
+          };
+        }),
       };
-    });
+    }
+    return { status: payload.status, error: payload.error };
   }
 
-  async getOneDoc(idDoc: number): Promise<Doc> {
+  async getOneDoc(idDoc: number): Promise<SuccessData | ErrorData> {
     const payload = await query(
       new Request(this.docCard.operations.selectData, false, { id: idDoc }),
     );
-    const item = payload.data[0];
-    return {
-      id: item?.id,
-      number: item?.s_number,
-      date: item?.d_date,
-      sum: item?.f_sum,
-      description: item?.s_description,
-    };
+    if (payload.status === ICallbackMessageStatus.Done) {
+      const item = payload.data[0];
+      return {
+        status: payload.status,
+        data: {
+          id: item?.id,
+          number: item?.s_number,
+          date: item?.d_date,
+          sum: item?.f_sum,
+          description: item?.s_description,
+        },
+      };
+    }
+    return { status: payload.status, error: payload.error };
   }
 
-  async createDoc(createDocDto: CreateDocDto): Promise<void> {
+  async createDoc(
+    createDocDto: CreateDocDto,
+  ): Promise<SuccessData | ErrorData> {
     const requests = [
       new Request(this.docCard.operations.insertRecord, true),
       new Request(this.docCard.operations.updateRecord, true, {
@@ -71,11 +96,17 @@ export class DocService {
         description: createDocDto.description,
       }),
     ];
-    await query(requests);
+    const payload = await query(requests);
+    if (payload.status === ICallbackMessageStatus.Done) {
+      return { status: payload.status };
+    }
+    return { status: payload.status, error: payload.error };
   }
 
-  async updateDoc(updateDocDto: UpdateDocDto): Promise<void> {
-    await query(
+  async updateDoc(
+    updateDocDto: UpdateDocDto,
+  ): Promise<SuccessData | ErrorData> {
+    const payload = await query(
       new Request(this.docCard.operations.updateRecord, true, {
         id: updateDocDto.id,
         number: updateDocDto.number,
@@ -83,52 +114,77 @@ export class DocService {
         description: updateDocDto.description,
       }),
     );
+    if (payload.status === ICallbackMessageStatus.Done) {
+      return { status: payload.status };
+    }
+    return { status: payload.status, error: payload.error };
   }
 
-  async deleteDoc(idDoc: number): Promise<void> {
-    await query(
+  async deleteDoc(idDoc: number): Promise<SuccessData | ErrorData> {
+    const payload = await query(
       new Request(this.docList.operations.deleteRecord, true, { id: idDoc }),
     );
+    if (payload.status === ICallbackMessageStatus.Done) {
+      return { status: payload.status };
+    }
+    return { status: payload.status, error: payload.error };
   }
 
   // DOC_ITEM
-  async getAllDocItem(idDoc: number): Promise<DocItem[]> {
+  async getAllDocItem(idDoc: number): Promise<SuccessData | ErrorData> {
     const payload = await query(
       new Request(this.docItemDetail.operations.selectData, false, {
         idDoc: idDoc,
       }),
     );
-    return payload.data.map((item) => {
+    if (payload.status === ICallbackMessageStatus.Done) {
       return {
-        id: item.id,
-        idDoc: item.id_doc,
-        number: item.s_number,
-        caption: item.s_caption,
-        sum: item.f_sum,
-        order: item.n_order,
+        status: payload.status,
+        data: payload.data.map((item) => {
+          return {
+            id: item.id,
+            idDoc: item.id_doc,
+            number: item.s_number,
+            caption: item.s_caption,
+            sum: item.f_sum,
+            order: item.n_order,
+          };
+        }),
       };
-    });
+    }
+    return { status: payload.status, error: payload.error };
   }
 
-  async getOneDocItem(idDoc: number, idDocItem: number): Promise<DocItem> {
+  async getOneDocItem(
+    idDoc: number,
+    idDocItem: number,
+  ): Promise<SuccessData | ErrorData> {
     const payload = await query(
       new Request(this.docItemCard.operations.selectData, false, {
         idDoc: idDoc,
         idDocItem: idDocItem,
       }),
     );
-    const item = payload.data[0];
-    return {
-      id: item?.id,
-      idDoc: item?.id_doc,
-      number: item?.s_number,
-      caption: item?.s_caption,
-      sum: item?.f_sum,
-      order: item?.n_order,
-    };
+    if (payload.status === ICallbackMessageStatus.Done) {
+      const item = payload.data[0];
+      return {
+        status: payload.status,
+        data: {
+          id: item?.id,
+          idDoc: item?.id_doc,
+          number: item?.s_number,
+          caption: item?.s_caption,
+          sum: item?.f_sum,
+          order: item?.n_order,
+        },
+      };
+    }
+    return { status: payload.status, error: payload.error };
   }
 
-  async createDocItem(createDocItemDto: CreateDocItemDto): Promise<void> {
+  async createDocItem(
+    createDocItemDto: CreateDocItemDto,
+  ): Promise<SuccessData | ErrorData> {
     console.log(createDocItemDto);
     const requests = [
       new Request(this.docItemCard.operations.insertRecord, true, {
@@ -143,11 +199,17 @@ export class DocService {
       }),
     ];
 
-    await query(requests);
+    const payload = await query(requests);
+    if (payload.status === ICallbackMessageStatus.Done) {
+      return { status: payload.status };
+    }
+    return { status: payload.status, error: payload.error };
   }
 
-  async updateDocItem(updateDocItemDto: UpdateDocItemDto): Promise<void> {
-    await query(
+  async updateDocItem(
+    updateDocItemDto: UpdateDocItemDto,
+  ): Promise<SuccessData | ErrorData> {
+    const payload = await query(
       new Request(this.docItemCard.operations.updateRecord, true, {
         id: updateDocItemDto.id,
         idDoc: updateDocItemDto.doc,
@@ -157,5 +219,9 @@ export class DocService {
         order: updateDocItemDto.order,
       }),
     );
+    if (payload.status === ICallbackMessageStatus.Done) {
+      return { status: payload.status };
+    }
+    return { status: payload.status, error: payload.error };
   }
 }

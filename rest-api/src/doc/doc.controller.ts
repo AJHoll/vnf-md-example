@@ -7,7 +7,13 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { Doc, DocItem, DocService } from './doc.service';
+import {
+  Doc,
+  DocItem,
+  DocService,
+  SuccessData,
+  ErrorData,
+} from './doc.service';
 import { CreateDocItemDto } from './dto/create-doc-item.dto';
 import { CreateDocDto } from './dto/create-doc.dto';
 import { UpdateDocItemDto } from './dto/update-doc-item.dto';
@@ -19,33 +25,39 @@ export class DocController {
 
   // DOC
   @Get('/')
-  async getAllDoc(): Promise<Doc | Doc[]> {
+  async getAllDoc(): Promise<SuccessData | ErrorData> {
     return this.docService.getAllDoc();
   }
 
   @Get('/:idDoc')
-  async getOneDoc(@Param('idDoc') idDoc): Promise<Doc> {
+  async getOneDoc(@Param('idDoc') idDoc): Promise<SuccessData | ErrorData> {
     return this.docService.getOneDoc(+idDoc);
   }
 
   @Post('/')
-  async createDoc(@Body() createDocDto: CreateDocDto): Promise<void> {
+  async createDoc(
+    @Body() createDocDto: CreateDocDto,
+  ): Promise<SuccessData | ErrorData> {
     return this.docService.createDoc(createDocDto);
   }
 
-  @Patch('/')
-  async updateDoc(@Body() UpdateDocDto: UpdateDocDto): Promise<void> {
-    return this.docService.updateDoc(UpdateDocDto);
+  @Patch('/:idDoc')
+  async updateDoc(
+    @Param('idDoc') idDoc: number,
+    @Body() updateDocDto: UpdateDocDto,
+  ): Promise<SuccessData | ErrorData> {
+    updateDocDto.id = idDoc;
+    return this.docService.updateDoc(updateDocDto);
   }
 
   @Delete('/:idDoc')
-  async deleteDoc(@Param('idDoc') idDoc): Promise<void> {
+  async deleteDoc(@Param('idDoc') idDoc): Promise<SuccessData | ErrorData> {
     return this.docService.deleteDoc(+idDoc);
   }
 
   //DOC_ITEM
   @Get('/:idDoc/item')
-  async getAllDocItem(@Param('idDoc') idDoc): Promise<DocItem[]> {
+  async getAllDocItem(@Param('idDoc') idDoc): Promise<SuccessData | ErrorData> {
     return this.docService.getAllDocItem(+idDoc);
   }
 
@@ -53,7 +65,7 @@ export class DocController {
   async getOneDocItem(
     @Param('idDoc') idDoc,
     @Param('idDocItem') idDocItem,
-  ): Promise<DocItem> {
+  ): Promise<SuccessData | ErrorData> {
     return this.docService.getOneDocItem(+idDoc, +idDocItem);
   }
 
@@ -61,7 +73,7 @@ export class DocController {
   async createDocItem(
     @Param('idDoc') idDoc: number,
     @Body() createDocItemDto: CreateDocItemDto,
-  ): Promise<void> {
+  ): Promise<SuccessData | ErrorData> {
     createDocItemDto.doc = idDoc;
     return this.docService.createDocItem(createDocItemDto);
   }
@@ -71,7 +83,7 @@ export class DocController {
     @Param('idDoc') idDoc: number,
     @Param('idDocItem') idDocItem: number,
     @Body() updateDocItemDto: UpdateDocItemDto,
-  ): Promise<void> {
+  ): Promise<SuccessData | ErrorData> {
     updateDocItemDto.doc = idDoc;
     updateDocItemDto.id = idDocItem;
     return this.docService.updateDocItem(updateDocItemDto);
