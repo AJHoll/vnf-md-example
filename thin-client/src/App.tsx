@@ -40,6 +40,8 @@ const App = observer(
         <Layout>
           <Layout.Content style={{ marginLeft: "30px", marginRight: "30px" }}>
             <PageHeader title="Master-detail sample by AJHoll" />
+
+            <Divider>Документ</Divider>
             <UniversalList
               key="doc-table"
               columns={this.docColumns}
@@ -50,7 +52,17 @@ const App = observer(
                 console.log(this.rootStore);
               }}
             />
-            <Divider />
+            <Divider>Спецификация</Divider>
+            <UniversalList
+              key="doc-table2"
+              columns={this.docColumns}
+              dataSource={this.rootStore.docSource}
+              loading={this.rootStore.docTableLoading}
+              onClickSelected={(data, event) => {
+                this.rootStore.docTableActiveKey = data.key;
+                console.log(this.rootStore);
+              }}
+            />
           </Layout.Content>
         </Layout>
       );
