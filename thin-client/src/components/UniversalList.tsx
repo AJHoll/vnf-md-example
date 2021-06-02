@@ -18,10 +18,15 @@ export type UniversalListProps = {
   pagination?: false | TablePaginationConfig | undefined;
   selectionType?: "radio" | "checkbox";
   onClickSelected?: (data: any, event: any) => void;
-  onEdit?: React.MouseEventHandler<HTMLElement> | undefined;
   onCreate?: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void;
   createBtnText?: React.ReactNode;
   customCreateBtn?: React.ReactNode;
+  onEdit?: (
+    selectedKey: string | number | undefined,
+    event: React.MouseEvent<HTMLElement, MouseEvent>
+  ) => void;
+  editBtnText?: React.ReactNode;
+  customEditBtn?: React.ReactNode;
 };
 
 export default class UniversalList extends React.Component<UniversalListProps> {
@@ -41,17 +46,40 @@ export default class UniversalList extends React.Component<UniversalListProps> {
           <Button
             name="uni-create-btn"
             icon={<Icons.PlusOutlined />}
-            style={{ width: "40px" }}
+            style={{ width: "40px", marginLeft: "5px" }}
             type="primary"
             children={this.props.createBtnText}
-            disabled={this.props.onCreate === undefined ? true : false}
             onClick={this.props.onCreate}
           />
         );
     }
     // Кнопки редактирования записи
     let editButtons: React.ReactNode;
-    return <Row justify="start">{createButtons}</Row>;
+    if (this.props.customEditBtn) {
+      editButtons = this.props.customEditBtn;
+    } else {
+      if (this.props.onEdit) {
+        editButtons = (
+          <Button
+            name="uni-edit-btn"
+            icon={<Icons.EditOutlined />}
+            style={{ width: "40px", marginLeft: "5px" }}
+            type="default"
+            children={this.props.editBtnText}
+            onClick={(event) => {
+              if (this.props.onEdit)
+                this.props.onEdit(this.state.selectedKey, event);
+            }}
+          />
+        );
+      }
+    }
+    return (
+      <Row justify="start">
+        {createButtons}
+        {editButtons}
+      </Row>
+    );
   }
 
   render() {
@@ -82,7 +110,8 @@ export default class UniversalList extends React.Component<UniversalListProps> {
               }
             },
             onDoubleClick: (event) => {
-              if (this.props.onEdit) this.props.onEdit(event);
+              if (this.props.onEdit)
+                this.props.onEdit(this.state.selectedKey, event);
             },
           };
         }}

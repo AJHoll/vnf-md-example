@@ -70,6 +70,12 @@ const App = observer(
               }}
               scroll={{ y: "200px" }}
               pagination={false}
+              onCreate={(event) => {
+                console.log("create");
+              }}
+              onEdit={(selectedKey, event) => {
+                console.log("edit", selectedKey);
+              }}
             />
             <Divider>Спецификация</Divider>
             <UniversalList
