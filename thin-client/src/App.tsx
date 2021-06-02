@@ -4,6 +4,8 @@ import { observer } from "mobx-react";
 import RootStore from "./store";
 import UniversalList from "./components/UniversalList";
 import { ColumnsType } from "antd/lib/table";
+import DocCard from "./components/DocCard";
+import DocItemCard from "./components/DocItemCard";
 
 const App = observer(
   class App extends React.Component {
@@ -60,6 +62,7 @@ const App = observer(
               style={{ margin: "0", padding: "0" }}
             />
             <Divider>Документ</Divider>
+            <DocCard rootStore={this.rootStore} />
             <UniversalList
               key="doc-table"
               columns={this.docColumns}
@@ -81,6 +84,7 @@ const App = observer(
               }}
             />
             <Divider>Спецификация</Divider>
+            <DocItemCard rootStore={this.rootStore} />
             <UniversalList
               key="doc-item-table"
               columns={this.docItemColumns}
