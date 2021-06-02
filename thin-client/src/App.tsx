@@ -12,7 +12,7 @@ const App = observer(
       await this.rootStore.componentDidMount();
     }
 
-    docColumns: ColumnsType<object> = [
+    docColumns: ColumnsType<any> = [
       {
         key: 1,
         title: "Номер",
@@ -34,35 +34,53 @@ const App = observer(
         dataIndex: "description",
       },
     ];
-
+    docItemColumns: ColumnsType<object> = [
+      {
+        key: 1,
+        title: "Номер",
+        dataIndex: "number",
+      },
+      {
+        key: 2,
+        title: "Наименование",
+        dataIndex: "caption",
+      },
+      {
+        key: 3,
+        title: "Сумма",
+        dataIndex: "sum",
+      },
+    ];
     render() {
       return (
         <Layout>
           <Layout.Content style={{ marginLeft: "30px", marginRight: "30px" }}>
-            <PageHeader title="Master-detail sample by AJHoll" />
-
+            <PageHeader
+              title="Master-detail sample by AJHoll"
+              style={{ margin: "0", padding: "0" }}
+            />
             <Divider>Документ</Divider>
             <UniversalList
               key="doc-table"
               columns={this.docColumns}
               dataSource={this.rootStore.docSource}
               loading={this.rootStore.docTableLoading}
-              onClickSelected={(data, event) => {
-                this.rootStore.docTableActiveKey = data.key;
-                console.log(this.rootStore);
+              onClickSelected={async (data, event) => {
+                await this.rootStore.setDocTableActiveKey(data.key);
               }}
+              scroll={{ y: "200px" }}
+              pagination={false}
             />
             <Divider>Спецификация</Divider>
             <UniversalList
-              key="doc-table2"
-              columns={this.docColumns}
-              dataSource={this.rootStore.docSource}
-              loading={this.rootStore.docTableLoading}
-              onClickSelected={(data, event) => {
-                this.rootStore.docTableActiveKey = data.key;
-                console.log(this.rootStore);
-              }}
+              key="doc-item-table"
+              columns={this.docItemColumns}
+              dataSource={this.rootStore.docItemSource}
+              loading={this.rootStore.docItemTableLoading}
+              scroll={{ y: "200px" }}
+              pagination={false}
             />
+            <Divider></Divider>
           </Layout.Content>
         </Layout>
       );
