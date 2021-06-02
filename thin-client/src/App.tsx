@@ -76,6 +76,9 @@ const App = observer(
               onEdit={(selectedKey, event) => {
                 console.log("edit", selectedKey);
               }}
+              onDelete={(selectedKeys, event) => {
+                console.log("delete", selectedKeys);
+              }}
             />
             <Divider>Спецификация</Divider>
             <UniversalList

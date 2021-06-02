@@ -27,6 +27,12 @@ export type UniversalListProps = {
   ) => void;
   editBtnText?: React.ReactNode;
   customEditBtn?: React.ReactNode;
+  onDelete?: (
+    selectedRowKeys: string[] | number[] | undefined,
+    event: React.MouseEvent<HTMLElement, MouseEvent>
+  ) => void;
+  deleteBtnText?: React.ReactNode;
+  customDeleteBtn?: React.ReactNode;
 };
 
 export default class UniversalList extends React.Component<UniversalListProps> {
@@ -46,7 +52,7 @@ export default class UniversalList extends React.Component<UniversalListProps> {
           <Button
             name="uni-create-btn"
             icon={<Icons.PlusOutlined />}
-            style={{ width: "40px", marginLeft: "5px" }}
+            style={{ minWidth: "40px", marginLeft: "5px" }}
             type="primary"
             children={this.props.createBtnText}
             onClick={this.props.onCreate}
@@ -63,21 +69,47 @@ export default class UniversalList extends React.Component<UniversalListProps> {
           <Button
             name="uni-edit-btn"
             icon={<Icons.EditOutlined />}
-            style={{ width: "40px", marginLeft: "5px" }}
+            style={{ minWidth: "40px", marginLeft: "5px" }}
             type="default"
             children={this.props.editBtnText}
+            disabled={!this.state.selectedKey}
             onClick={(event) => {
-              if (this.props.onEdit)
+              if (this.props.onEdit && this.state.selectedKey)
                 this.props.onEdit(this.state.selectedKey, event);
             }}
           />
         );
       }
     }
+    // Кнопки удаления записи
+    let deleteButtons: React.ReactNode;
+    if (this.props.customDeleteBtn) {
+      deleteButtons = this.props.customDeleteBtn;
+    } else {
+      if (this.props.onDelete) {
+        deleteButtons = (
+          <Button
+            name="uni-delete-btn"
+            icon={<Icons.DeleteOutlined />}
+            style={{ minWidth: "40px", marginLeft: "5px" }}
+            type="primary"
+            danger
+            children={this.props.deleteBtnText}
+            disabled={this.state.selectedRowKeys.length === 0}
+            onClick={(event) => {
+              if (this.props.onDelete && this.state.selectedRowKeys.length > 0)
+                this.props.onDelete(this.state.selectedRowKeys, event);
+            }}
+          />
+        );
+      }
+    }
+
     return (
       <Row justify="start">
         {createButtons}
         {editButtons}
+        {deleteButtons}
       </Row>
     );
   }
@@ -100,17 +132,19 @@ export default class UniversalList extends React.Component<UniversalListProps> {
                 (this.state.selectedRowKeys.length === 1 &&
                   this.state.selectedKey !== undefined)
               ) {
-                this.setState({
-                  selectedRowKeys: [data.key],
-                  selectedKey: data.key,
-                });
-                if (this.props.onClickSelected) {
-                  this.props.onClickSelected(data, event);
+                if (this.state.selectedKey !== data.key) {
+                  this.setState({
+                    selectedRowKeys: [data.key],
+                    selectedKey: data.key,
+                  });
+                  if (this.props.onClickSelected) {
+                    this.props.onClickSelected(data, event);
+                  }
                 }
               }
             },
             onDoubleClick: (event) => {
-              if (this.props.onEdit)
+              if (this.props.onEdit && this.state.selectedKey)
                 this.props.onEdit(this.state.selectedKey, event);
             },
           };
@@ -119,6 +153,7 @@ export default class UniversalList extends React.Component<UniversalListProps> {
           type: this.props.selectionType,
           onSelect: (record, selected, selRows, event) => {
             this.setState({
+              selectedKey: undefined,
               selectedRowKeys: selRows.map((item: any) => {
                 return item.key;
               }),
