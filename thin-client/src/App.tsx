@@ -76,7 +76,7 @@ const App = observer(
                 this.rootStore.docCardStore.openCardForInsert();
               }}
               onEdit={(selectedKey, event) => {
-                this.rootStore.docCardStore.openCardForEdit(selectedKey)
+                this.rootStore.docCardStore.openCardForEdit(selectedKey);
               }}
               onDelete={(selectedKeys, event) => {
                 this.rootStore.onDocDelete(selectedKeys);

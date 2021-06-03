@@ -6,8 +6,6 @@ import RootStore from ".";
 import { ICallbackMessageStatus } from "../interfaces/ICallbackMessageStatus";
 
 export default class DocItemCardStore {
-
-
   parentStore: RootStore;
   rootStore: RootStore;
 
@@ -16,17 +14,16 @@ export default class DocItemCardStore {
   cardData: any;
   dataWasModified: boolean;
 
-
   constructor(parentStore: RootStore, rootStore: RootStore) {
     this.parentStore = parentStore;
     this.rootStore = rootStore;
 
     this.cardVisible = false;
-    this.cardTitle = 'Спецификация документа';
+    this.cardTitle = "Спецификация документа";
     this.dataWasModified = false;
     makeObservable(this, {
-      cardVisible: observable
-    })
+      cardVisible: observable,
+    });
   }
   setCardVisible(cardVisible: boolean) {
     if (!cardVisible) this.setDataWasModified(false);
@@ -46,16 +43,16 @@ export default class DocItemCardStore {
     let record: any = {
       id: -1,
       doc: undefined,
-      number: 'Б/Н',
-      caption: '',
+      number: "Б/Н",
+      caption: "",
       sum: 0,
-    }
-    if (!selectedId) { // Когда вставляем новую запись
-      this.setCardTitle('Новая спецификация документа')
+    };
+    if (!selectedId) {
+      // Когда вставляем новую запись
+      this.setCardTitle("Новая спецификация документа");
       this.setCardData(record);
       this.setCardVisible(true);
     } else {
-
     }
   }
 

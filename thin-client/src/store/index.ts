@@ -104,10 +104,8 @@ export default class RootStore {
           message.error(payload.data.error.detail);
         }
         count++;
-        if (count === selectedKeys.length)
-          this.loadDocData();
+        if (count === selectedKeys.length) this.loadDocData();
       }
     }
-
   }
 }

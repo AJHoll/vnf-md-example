@@ -24,7 +24,7 @@ export class DocItemCardClass extends React.Component<DocItemCardProps> {
             try {
               this.formRef.current.submit();
             } catch (err) {
-              console.error(err)
+              console.error(err);
             }
           }
         }}
