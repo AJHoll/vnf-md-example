@@ -13,7 +13,6 @@ const App = observer(
     async componentDidMount() {
       await this.rootStore.componentDidMount();
     }
-
     docColumns: ColumnsType<any> = [
       {
         key: 1,
@@ -58,7 +57,7 @@ const App = observer(
         <Layout>
           <Layout.Content style={{ marginLeft: "30px", marginRight: "30px" }}>
             <PageHeader
-              title="Master-detail sample by AJHoll"
+              title="Master-detail example by AJHoll"
               style={{ margin: "0", padding: "0" }}
             />
             <Divider>Документ</Divider>
@@ -74,13 +73,14 @@ const App = observer(
               scroll={{ y: "200px" }}
               pagination={false}
               onCreate={(event) => {
-                console.log("create");
+                this.rootStore.docCardStore.openCardForInsert();
               }}
               onEdit={(selectedKey, event) => {
-                console.log("edit", selectedKey);
+                this.rootStore.docCardStore.openCardForEdit(selectedKey)
               }}
               onDelete={(selectedKeys, event) => {
-                console.log("delete", selectedKeys);
+                this.rootStore.onDocDelete(selectedKeys);
+                this.rootStore.setDocTableActiveKey(undefined);
               }}
             />
             <Divider>Спецификация</Divider>
@@ -92,8 +92,12 @@ const App = observer(
               loading={this.rootStore.docItemTableLoading}
               scroll={{ y: "200px" }}
               pagination={false}
+              createBtnDisabled={!this.rootStore.docTableActiveKey}
+              onCreate={(event) => {
+                this.rootStore.docItemCardStore.openCardForInsert();
+              }}
             />
-            <Divider></Divider>
+            <Divider />
           </Layout.Content>
         </Layout>
       );

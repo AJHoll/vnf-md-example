@@ -4,6 +4,8 @@ import { action, makeObservable, observable } from "mobx";
 import moment from "moment";
 import { ICallbackMessageStatus } from "../interfaces/ICallbackMessageStatus";
 import serializeData from "../utilities/serializeData";
+import DocCardStore from "./DocCardStore";
+import DocItemCardStore from "./DocItemCardStore";
 
 export default class RootStore {
   docSource: object[];
@@ -13,9 +15,14 @@ export default class RootStore {
   docTableLoading: boolean;
   docTableActiveKey: string | number | undefined;
   docItemTableLoading: boolean;
+  docCardStore: DocCardStore;
+  docItemCardStore: DocItemCardStore;
 
   constructor() {
     this.apiUrl = "http://localhost:8080";
+
+    this.docCardStore = new DocCardStore(this, this);
+    this.docItemCardStore = new DocItemCardStore(this, this);
 
     this.docSource = [];
     this.docTableLoading = false;
@@ -57,15 +64,19 @@ export default class RootStore {
   }
 
   async componentDidMount() {
+    await this.loadDocData();
+  }
+
+  async loadDocData() {
     this.setDocTableLoading(true);
-    const payload = await axios.get(`${this.apiUrl}/doc`, { method: "GET" });
+    const payload = await axios.get(`${this.apiUrl}/doc`);
     if (payload.data.status === ICallbackMessageStatus.Done) {
       const docSource = serializeData(payload.data.data).map((item) => {
         return { ...item, date: moment(item.date).format("DD.MM.YYYY") };
       });
       this.setDocSource(docSource);
     } else {
-      message.error(payload.data.error);
+      message.error(payload.data.error.detail);
     }
     this.setDocTableLoading(false);
   }
@@ -79,8 +90,24 @@ export default class RootStore {
       const docItemSource = serializeData(payload.data.data);
       this.setDocItemSource(docItemSource);
     } else {
-      message.error(payload.data.error);
+      message.error(payload.data.error.detail);
     }
     this.setDocItemTableLoading(false);
+  }
+
+  async onDocDelete(selectedKeys: number[] | string[] | undefined) {
+    let count = 0;
+    if (selectedKeys) {
+      for (let key of selectedKeys) {
+        const payload = await axios.delete(`${this.apiUrl}/doc/${key}`);
+        if (payload.data.status !== ICallbackMessageStatus.Done) {
+          message.error(payload.data.error.detail);
+        }
+        count++;
+        if (count === selectedKeys.length)
+          this.loadDocData();
+      }
+    }
+
   }
 }

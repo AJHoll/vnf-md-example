@@ -2,36 +2,41 @@ import { Button, Row, Table } from "antd";
 import { ColumnsType, TablePaginationConfig } from "antd/lib/table";
 import React from "react";
 import * as Icons from "@ant-design/icons";
+import { SizeType } from "antd/lib/config-provider/SizeContext";
 
 export type UniversalListProps = {
   columns: ColumnsType<object>;
   dataSource?: object[];
   loading?: boolean;
+  size?: SizeType;
   scroll?:
-    | ({
-        x?: string | number | true | undefined;
-        y?: string | number | undefined;
-      } & {
-        scrollToFirstRowOnChange?: boolean | undefined;
-      })
-    | undefined;
+  | ({
+    x?: string | number | true | undefined;
+    y?: string | number | undefined;
+  } & {
+    scrollToFirstRowOnChange?: boolean | undefined;
+  })
+  | undefined;
   pagination?: false | TablePaginationConfig | undefined;
   selectionType?: "radio" | "checkbox";
-  onClickSelected?: (data: any, event: any) => void;
+  onClickSelected?: (data: any, event?: any) => void;
   onCreate?: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void;
   createBtnText?: React.ReactNode;
+  createBtnDisabled?: boolean;
   customCreateBtn?: React.ReactNode;
   onEdit?: (
     selectedKey: string | number | undefined,
     event: React.MouseEvent<HTMLElement, MouseEvent>
   ) => void;
   editBtnText?: React.ReactNode;
+  editBtnDisabled?: boolean;
   customEditBtn?: React.ReactNode;
   onDelete?: (
     selectedRowKeys: string[] | number[] | undefined,
     event: React.MouseEvent<HTMLElement, MouseEvent>
   ) => void;
   deleteBtnText?: React.ReactNode;
+  deleteBtnDisabled?: boolean;
   customDeleteBtn?: React.ReactNode;
 };
 
@@ -56,6 +61,7 @@ export default class UniversalList extends React.Component<UniversalListProps> {
             type="primary"
             children={this.props.createBtnText}
             onClick={this.props.onCreate}
+            disabled={this.props.createBtnDisabled || false}
           />
         );
     }
@@ -72,7 +78,7 @@ export default class UniversalList extends React.Component<UniversalListProps> {
             style={{ minWidth: "40px", marginLeft: "5px" }}
             type="default"
             children={this.props.editBtnText}
-            disabled={!this.state.selectedKey}
+            disabled={!this.state.selectedKey || this.props.editBtnDisabled === true}
             onClick={(event) => {
               if (this.props.onEdit && this.state.selectedKey)
                 this.props.onEdit(this.state.selectedKey, event);
@@ -95,10 +101,14 @@ export default class UniversalList extends React.Component<UniversalListProps> {
             type="primary"
             danger
             children={this.props.deleteBtnText}
-            disabled={this.state.selectedRowKeys.length === 0}
+            disabled={this.state.selectedRowKeys.length === 0 || this.props.deleteBtnDisabled === true}
             onClick={(event) => {
               if (this.props.onDelete && this.state.selectedRowKeys.length > 0)
                 this.props.onDelete(this.state.selectedRowKeys, event);
+              this.setState({
+                selectedRowKeys: [],
+                selectedKey: undefined,
+              })
             }}
           />
         );
@@ -117,6 +127,7 @@ export default class UniversalList extends React.Component<UniversalListProps> {
   render() {
     return (
       <Table
+        size={this.props.size || "small"}
         title={() => this.getTitle()}
         scroll={this.props.scroll}
         pagination={this.props.pagination}
@@ -161,9 +172,12 @@ export default class UniversalList extends React.Component<UniversalListProps> {
           },
           selectedRowKeys: this.state.selectedRowKeys,
           onChange: (selectedKeys) => {
+            if (selectedKeys.length <= 1)
+              if (this.props.onClickSelected)
+                this.props.onClickSelected({ key: selectedKeys[0] });
             this.setState({
-              selectedRowKeys: selectedKeys,
               selectedKey: undefined,
+              selectedRowKeys: selectedKeys,
             });
           },
         }}

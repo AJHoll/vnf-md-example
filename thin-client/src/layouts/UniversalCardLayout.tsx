@@ -14,12 +14,12 @@ interface IDrawerCardLayoutProps {
   placement?: "right" | "top" | "bottom" | "left" | undefined;
   onCancel?: (event: React.MouseEvent<HTMLElement, MouseEvent> | any) => void;
   footerJustify?:
-    | "end"
-    | "start"
-    | "center"
-    | "space-around"
-    | "space-between"
-    | undefined;
+  | "end"
+  | "start"
+  | "center"
+  | "space-around"
+  | "space-between"
+  | undefined;
   cancelButtonTitle?: React.ReactNode;
   dataWasModified?: boolean;
 }
@@ -96,6 +96,7 @@ const DrawerCardLayout = observer(
 
       return (
         <Drawer
+          destroyOnClose
           closable={true}
           maskClosable={false}
           keyboard={true}
