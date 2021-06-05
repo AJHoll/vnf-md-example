@@ -25,7 +25,7 @@ export class DocCardClass extends React.Component<DocCardProps> {
             try {
               this.formRef.current.submit();
             } catch (err) {
-              console.error(err)
+              console.error(err);
             }
           }
         }}
@@ -33,26 +33,55 @@ export class DocCardClass extends React.Component<DocCardProps> {
         <Form
           ref={this.formRef}
           onFinish={(values) => this.docCardStore.onFinish(values)}
-          initialValues={
-            {
-              number: this.docCardStore.cardData?.number,
-              date: this.docCardStore.cardData?.date,
-              sum: this.docCardStore.cardData?.sum,
-              description: this.docCardStore.cardData?.description
-            }
-          }
+          initialValues={{
+            number: this.docCardStore.cardData?.number,
+            date: this.docCardStore.cardData?.date,
+            sum: this.docCardStore.cardData?.sum,
+            description: this.docCardStore.cardData?.description,
+          }}
         >
-          <Form.Item label="Номер" name="number" rules={[{ required: true, message: 'Поле обязательно для заполнения!' }]}>
-            <Input onChange={(event) => this.docCardStore.setNumber(event.target.value)} />
+          <Form.Item
+            label="Номер"
+            name="number"
+            rules={[
+              { required: true, message: "Поле обязательно для заполнения!" },
+            ]}
+          >
+            <Input
+              onChange={(event) =>
+                this.docCardStore.setNumber(event.target.value)
+              }
+            />
           </Form.Item>
-          <Form.Item label="Дата" name="date" rules={[{ required: true, message: 'Поле обязательно для заполнения!' }]}>
-            <Input type="date" onChange={(event) => this.docCardStore.setDate(event.target.value)} />
+          <Form.Item
+            label="Дата"
+            name="date"
+            rules={[
+              { required: true, message: "Поле обязательно для заполнения!" },
+            ]}
+          >
+            <Input
+              type="date"
+              onChange={(event) =>
+                this.docCardStore.setDate(event.target.value)
+              }
+            />
           </Form.Item>
           <Form.Item label="Сумма" name="sum">
             <Input readOnly type="number" />
           </Form.Item>
-          <Form.Item label="Примечание" name="description" rules={[{ required: true, message: 'Поле обязательно для заполнения!' }]}>
-            <TextArea onChange={(event) => this.docCardStore.setDescription(event.target.value)} />
+          <Form.Item
+            label="Примечание"
+            name="description"
+            rules={[
+              { required: true, message: "Поле обязательно для заполнения!" },
+            ]}
+          >
+            <TextArea
+              onChange={(event) =>
+                this.docCardStore.setDescription(event.target.value)
+              }
+            />
           </Form.Item>
         </Form>
       </UniversalCardLayout>

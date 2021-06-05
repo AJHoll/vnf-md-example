@@ -24,14 +24,13 @@ export class DocItemCardClass extends React.Component<DocItemCardProps> {
             try {
               this.formRef.current.submit();
             } catch (err) {
-              console.error(err)
+              console.error(err);
             }
           }
         }}
       >
         <Form
           ref={this.formRef}
-
           initialValues={{
             number: this.docItemCardStore.cardData.number,
             caption: this.docItemCardStore.cardData.caption,
@@ -39,15 +38,40 @@ export class DocItemCardClass extends React.Component<DocItemCardProps> {
           }}
           onFinish={() => this.docItemCardStore.onFinish()}
         >
-          <Form.Item name="number" label="Номер" rules={[{ required: true, message: 'Поле обязательно для заполнения!' }]}>
-            <Input onChange={(event) => { this.docItemCardStore.setNumber(event.target.value); }} />
+          <Form.Item
+            name="number"
+            label="Номер"
+            rules={[
+              { required: true, message: "Поле обязательно для заполнения!" },
+            ]}
+          >
+            <Input
+              onChange={(event) => {
+                this.docItemCardStore.setNumber(event.target.value);
+              }}
+            />
           </Form.Item>
           <Form.Item name="caption" label="Наименование">
-            <Input onChange={(event) => { this.docItemCardStore.setCaption(event.target.value); }} />
+            <Input
+              onChange={(event) => {
+                this.docItemCardStore.setCaption(event.target.value);
+              }}
+            />
           </Form.Item>
-          <Form.Item name="sum" label="Сумма" rules={[{ required: true, message: 'Поле обязательно для заполнения!' }]}>
-            <Input type="number" onChange={(event) => { this.docItemCardStore.setSum(+event.target.value); }} />
-          </Form.Item >
+          <Form.Item
+            name="sum"
+            label="Сумма"
+            rules={[
+              { required: true, message: "Поле обязательно для заполнения!" },
+            ]}
+          >
+            <Input
+              type="number"
+              onChange={(event) => {
+                this.docItemCardStore.setSum(+event.target.value);
+              }}
+            />
+          </Form.Item>
         </Form>
       </UniversalCardLayout>
     );

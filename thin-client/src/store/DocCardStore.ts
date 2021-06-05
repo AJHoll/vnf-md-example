@@ -6,13 +6,13 @@ import RootStore from ".";
 import { ICallbackMessageStatus } from "../interfaces/ICallbackMessageStatus";
 
 export type DocCardDataType = {
-  key?: string | number | undefined,
-  id: number | undefined,
-  number: string | undefined,
-  date: string | undefined,
-  sum?: number | undefined,
-  description?: string | undefined
-}
+  key?: string | number | undefined;
+  id: number | undefined;
+  number: string | undefined;
+  date: string | undefined;
+  sum?: number | undefined;
+  description?: string | undefined;
+};
 
 export default class DocCardStore {
   parentStore: RootStore;
@@ -28,14 +28,14 @@ export default class DocCardStore {
     this.rootStore = rootStore;
 
     this.cardVisible = false;
-    this.cardTitle = 'Документ';
+    this.cardTitle = "Документ";
     this.cardData = {
       key: undefined,
       id: undefined,
-      number: '',
+      number: "",
       date: undefined,
       sum: 0,
-      description: '',
+      description: "",
     };
     this.dataWasModified = false;
 
@@ -51,7 +51,7 @@ export default class DocCardStore {
       setNumber: action,
       setDate: action,
       setDescription: action,
-    })
+    });
   }
 
   setNumber(number: string) {
@@ -81,19 +81,21 @@ export default class DocCardStore {
     this.dataWasModified = dataWasModified;
   }
 
-
   async openCard(selectedId?: number | string | undefined) {
     let record: DocCardDataType = {
       id: -1,
-      number: 'Б/Н',
-      date: moment(new Date()).format("YYYY-MM-DD")
-    }
-    if (!selectedId) { // Когда вставляем новую запись
-      this.setCardTitle('Новый документ')
+      number: "Б/Н",
+      date: moment(new Date()).format("YYYY-MM-DD"),
+    };
+    if (!selectedId) {
+      // Когда вставляем новую запись
+      this.setCardTitle("Новый документ");
       this.setCardData(record);
       this.setCardVisible(true);
     } else {
-      const payload = await axios.get(`${this.rootStore.apiUrl}/doc/${selectedId}`)
+      const payload = await axios.get(
+        `${this.rootStore.apiUrl}/doc/${selectedId}`
+      );
       if (payload.data.status === ICallbackMessageStatus.Done) {
         record = {
           id: payload.data.data.id,
@@ -101,8 +103,12 @@ export default class DocCardStore {
           date: moment(payload.data.data.date).format("YYYY-MM-DD"),
           sum: payload.data.data.sum,
           description: payload.data.data.description,
-        }
-        this.setCardTitle(`Документ от ${moment(payload.data.data.date).format("DD.MM.YYYY")} № ${record.number}`);
+        };
+        this.setCardTitle(
+          `Документ от ${moment(payload.data.data.date).format(
+            "DD.MM.YYYY"
+          )} № ${record.number}`
+        );
         this.setCardData(record);
         this.setCardVisible(true);
       } else {
@@ -134,7 +140,10 @@ export default class DocCardStore {
         message.error(payload.data.error.detail);
       }
     } else {
-      payload = await axios.patch(`${this.rootStore.apiUrl}/doc/${this.cardData.id}`, this.cardData);
+      payload = await axios.patch(
+        `${this.rootStore.apiUrl}/doc/${this.cardData.id}`,
+        this.cardData
+      );
       if (payload.data.status === ICallbackMessageStatus.Done) {
         this.parentStore.loadDocData();
       } else {
