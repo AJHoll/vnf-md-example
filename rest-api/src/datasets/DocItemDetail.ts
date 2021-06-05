@@ -14,8 +14,8 @@ export default class DocItemDetail implements IDataset {
       },
       deleteRecord: {
         query: `select cmn_doc.doc_item__delete_record($(id))`,
-        bindingParams: { id: null }
-      }
+        bindingParams: { id: null },
+      },
     };
   }
 }

@@ -226,7 +226,9 @@ export class DocService {
 
   async deleteDocItem(idDocItem: number): Promise<SuccessData | ErrorData> {
     const payload = await query(
-      new Request(this.docItemDetail.operations.deleteRecord, true, { id: idDocItem }),
+      new Request(this.docItemDetail.operations.deleteRecord, true, {
+        id: idDocItem,
+      }),
     );
     if (payload.status === ICallbackMessageStatus.Done) {
       return { status: payload.status };

@@ -15,7 +15,7 @@ import { UpdateDocDto } from './dto/update-doc.dto';
 
 @Controller('doc')
 export class DocController {
-  constructor(private readonly docService: DocService) { }
+  constructor(private readonly docService: DocService) {}
 
   // DOC
   @Get('/')
