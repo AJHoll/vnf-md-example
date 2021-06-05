@@ -19,7 +19,7 @@ export default class RootStore {
   docItemCardStore: DocItemCardStore;
 
   constructor() {
-    this.apiUrl = "http://localhost:8080";
+    this.apiUrl = "/api";
 
     this.docCardStore = new DocCardStore(this, this);
     this.docItemCardStore = new DocItemCardStore(this, this);
@@ -119,8 +119,10 @@ export default class RootStore {
           message.error(payload.data.error.detail);
         }
         count++;
-        if (count === selectedKeys.length)
+        if (count === selectedKeys.length) {
           this.loadDocItemData(this.docTableActiveKey);
+          this.loadDocData();
+        }
       }
     }
   }

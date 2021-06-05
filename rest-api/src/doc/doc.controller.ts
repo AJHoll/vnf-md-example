@@ -13,7 +13,7 @@ import { CreateDocDto } from './dto/create-doc.dto';
 import { UpdateDocItemDto } from './dto/update-doc-item.dto';
 import { UpdateDocDto } from './dto/update-doc.dto';
 
-@Controller('doc')
+@Controller('api/doc')
 export class DocController {
   constructor(private readonly docService: DocService) {}
 
@@ -85,8 +85,9 @@ export class DocController {
 
   @Delete('/:idDoc/item/:idDocItem')
   async deleteDocItem(
+    @Param('idDoc') idDoc: number,
     @Param('idDocItem') idDocItem: number,
   ): Promise<SuccessData | ErrorData> {
-    return this.docService.deleteDocItem(idDocItem);
+    return this.docService.deleteDocItem(idDocItem, idDoc);
   }
 }
