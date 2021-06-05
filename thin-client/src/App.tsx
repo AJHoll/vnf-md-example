@@ -11,6 +11,7 @@ const App = observer(
   class App extends React.Component {
     rootStore = new RootStore();
     async componentDidMount() {
+      document.title = 'Master-detail example by AJHoll'
       await this.rootStore.componentDidMount();
     }
     docColumns: ColumnsType<any> = [
@@ -76,7 +77,7 @@ const App = observer(
                 this.rootStore.docCardStore.openCardForInsert();
               }}
               onEdit={(selectedKey, event) => {
-                this.rootStore.docCardStore.openCardForEdit(selectedKey);
+                this.rootStore.docCardStore.openCardForEdit(selectedKey)
               }}
               onDelete={(selectedKeys, event) => {
                 this.rootStore.onDocDelete(selectedKeys);
@@ -94,7 +95,15 @@ const App = observer(
               pagination={false}
               createBtnDisabled={!this.rootStore.docTableActiveKey}
               onCreate={(event) => {
-                this.rootStore.docItemCardStore.openCardForInsert();
+                if (this.rootStore.docTableActiveKey)
+                  this.rootStore.docItemCardStore.openCardForInsert(this.rootStore.docTableActiveKey);
+              }}
+              onEdit={(selectedKey) => {
+                if (this.rootStore.docTableActiveKey)
+                  this.rootStore.docItemCardStore.openCardForEdit(this.rootStore.docTableActiveKey, selectedKey);
+              }}
+              onDelete={(selectedKeys) => {
+                this.rootStore.onDocItemDelete(selectedKeys);
               }}
             />
             <Divider />

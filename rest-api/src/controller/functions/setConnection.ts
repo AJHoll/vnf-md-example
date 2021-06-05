@@ -15,7 +15,6 @@ export interface IPgConnectionPool {
 
 const setConnection = async (payload: any): Promise<ICallbackMessage> => {
   const pgp: IMain<{}, IClient> = require('pg-promise')();
-  console.log(payload);
   // Создаем подключение и проверяем его
   let nickname: string | undefined;
   let password: string | undefined;

@@ -185,7 +185,6 @@ export class DocService {
   async createDocItem(
     createDocItemDto: CreateDocItemDto,
   ): Promise<SuccessData | ErrorData> {
-    console.log(createDocItemDto);
     const requests = [
       new Request(this.docItemCard.operations.insertRecord, true, {
         idDoc: createDocItemDto.doc,
@@ -218,6 +217,16 @@ export class DocService {
         sum: updateDocItemDto.sum,
         order: updateDocItemDto.order,
       }),
+    );
+    if (payload.status === ICallbackMessageStatus.Done) {
+      return { status: payload.status };
+    }
+    return { status: payload.status, error: payload.error };
+  }
+
+  async deleteDocItem(idDocItem: number): Promise<SuccessData | ErrorData> {
+    const payload = await query(
+      new Request(this.docItemDetail.operations.deleteRecord, true, { id: idDocItem }),
     );
     if (payload.status === ICallbackMessageStatus.Done) {
       return { status: payload.status };

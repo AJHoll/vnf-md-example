@@ -104,7 +104,22 @@ export default class RootStore {
           message.error(payload.data.error.detail);
         }
         count++;
-        if (count === selectedKeys.length) this.loadDocData();
+        if (count === selectedKeys.length)
+          this.loadDocData();
+      }
+    }
+  }
+  async onDocItemDelete(selectedKeys: number[] | string[] | undefined) {
+    let count = 0;
+    if (selectedKeys) {
+      for (let key of selectedKeys) {
+        const payload = await axios.delete(`${this.apiUrl}/doc/${this.docTableActiveKey}/item/${key}`);
+        if (payload.data.status !== ICallbackMessageStatus.Done) {
+          message.error(payload.data.error.detail);
+        }
+        count++;
+        if (count === selectedKeys.length)
+          this.loadDocItemData(this.docTableActiveKey);
       }
     }
   }
