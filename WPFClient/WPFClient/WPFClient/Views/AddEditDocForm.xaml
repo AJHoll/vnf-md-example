@@ -1,0 +1,92 @@
+﻿<Page x:Class="WPFClient.Views.AddEditDocForm"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+      xmlns:local="clr-namespace:WPFClient.Views"
+      mc:Ignorable="d" 
+      WindowWidth="700" WindowHeight="500"
+      Title="AddEditForm">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60px"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40px"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Name="Header" Background="#127b9e">
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="tblockHeader"
+                       Foreground="White" FontWeight="Bold"/>
+        </Grid>
+        <Grid Grid.Row="1" VerticalAlignment="Top"
+              Margin="0,10,0,0"
+              Name="Content">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0"
+                   Text="Номер: "
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Center"
+                   Margin="10"/>
+            <TextBox Grid.Row="0" Grid.Column="1"
+                 x:Name="tbNumber"
+                 VerticalAlignment="Center"
+                 Margin="10"/>
+            <TextBlock Grid.Row="1" Grid.Column="0"
+                   x:Name="tblockDate"
+                   VerticalAlignment="Center"
+                   Margin="10"
+                   Text="Дата:"/>
+            <telerik:RadDatePicker Grid.Row="1" Grid.Column="1"
+                               x:Name="dpDate"
+                               VerticalAlignment="Center"
+                               Margin="10"
+                               DateTimeWatermarkContent="Выберите дату"/>
+            <TextBlock Grid.Row="2" Grid.Column="0"
+                   x:Name="tblockSum"
+                   VerticalAlignment="Center"
+                   Margin="10"
+                   Text="Сумма:"/>
+            <TextBox Grid.Row="2" Grid.Column="1"
+                 x:Name="tbSum"
+                 VerticalAlignment="Center"
+                 IsReadOnly="True"
+                 Margin="10"/>
+            <TextBlock Grid.Row="3" Grid.Column="0"
+                   Text="Примечание: "
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Center"
+                   Margin="10"/>
+            <TextBox Grid.Row="3" Grid.Column="1"
+                 x:Name="tbNote"
+                 VerticalAlignment="Center"
+                 TextWrapping="Wrap"
+                 VerticalScrollBarVisibility="Visible"
+                 AcceptsReturn="True"
+                 Margin="10"/>
+        </Grid>
+        <Grid Grid.Row="2">
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+            <telerik:RadButton x:Name="btnCancelChanges"
+                           VerticalAlignment="Center"
+                           Margin="10,0"
+                           Padding="5"
+                           Click="BtnCancelChanges_Click"/>
+            <telerik:RadButton x:Name="btnSaveChanges"
+                           VerticalAlignment="Center"
+                           Margin="10,0"
+                           Padding="5"
+                           Click="BtnSaveChanges_Click"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>

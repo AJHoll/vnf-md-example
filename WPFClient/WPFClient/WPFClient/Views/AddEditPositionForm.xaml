@@ -1,0 +1,76 @@
+﻿<Page x:Class="WPFClient.Views.AddEditPositionForm"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+      xmlns:local="clr-namespace:WPFClient.Views"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      WindowWidth="700" WindowHeight="500"
+      Title="AddEditPositionForm">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60px"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40px"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Name="Header" Background="#127b9e">
+            <TextBlock x:Name="tblockHeader" Foreground="White"
+                       FontWeight="Bold" VerticalAlignment="Center"
+                       HorizontalAlignment="Center"/>
+        </Grid>
+        <Grid Grid.Row="1" VerticalAlignment="Top" Margin="0,10,0,0"
+              Name="Content">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Left"
+                       Margin="10"
+                       Text="Номер:"/>
+            <TextBox Grid.Row="0" Grid.Column="1"
+                     x:Name="tbNumber"
+                     VerticalAlignment="Center"
+                     Margin="10,0"/>
+            <TextBlock Grid.Row="1" Grid.Column="0"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Left"
+                       Margin="10"
+                       Text="Наименование:"/>
+            <TextBox Grid.Row="1" Grid.Column="1"
+                     x:Name="tbName"
+                     VerticalAlignment="Center"
+                     Margin="10,0"/>
+            <TextBlock Grid.Row="2" Grid.Column="0"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Left"
+                       Margin="10"
+                       Text="Сумма:"/>
+            <TextBox Grid.Row="2" Grid.Column="1"
+                     x:Name="tbSum"
+                     VerticalAlignment="Center"
+                     Margin="10,0"/>
+        </Grid>
+        <Grid Grid.Row="2" Name="Footer">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <telerik:RadButton x:Name="btnCancel"
+                                   VerticalAlignment="Center"
+                                   Margin="10,0"
+                                   Padding="5"
+                                   Click="BtnCancel_Click"/>
+                <telerik:RadButton x:Name="btnSaveChanges"
+                                   VerticalAlignment="Center"
+                                   Margin="10,0"
+                                   Padding="5"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>

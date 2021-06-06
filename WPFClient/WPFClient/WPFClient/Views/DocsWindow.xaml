@@ -1,0 +1,89 @@
+﻿<Page x:Class="WPFClient.Views.DocsWindow"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+      xmlns:local="clr-namespace:WPFClient.Views"
+      mc:Ignorable="d" 
+      ShowsNavigationUI="False"
+      Title="DocsWindow" WindowWidth="700" WindowHeight="500">
+    <Page.Resources>
+        <Style TargetType="telerik:RadButton" x:Name="btnMainWindowStyle">
+            <Setter Property="Width" Value="30"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Margin" Value="0,0,5,0"/>
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+    </Page.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center"
+                    HorizontalAlignment="Right">
+            <telerik:RadButton x:Name="btnAddDocument"
+                               Click="BtnAddDocument_Click">
+                <telerik:RadButton.Content>
+                    <Image Source="../Resources/Images/add.png"/>
+                </telerik:RadButton.Content>
+            </telerik:RadButton>
+            <telerik:RadButton x:Name="btnEditDocument"
+                               Click="BtnEditDocument_Click">
+                <telerik:RadButton.Content>
+                    <Image Source="../Resources/Images/edit.png"/>
+                </telerik:RadButton.Content>
+            </telerik:RadButton>
+            <telerik:RadButton x:Name="btnDeleteDocument"
+                               Click="BtnDeleteDocument_Click">
+                <Button.Content>
+                    <Image Source="../Resources/Images/delete.png"/>
+                </Button.Content>
+            </telerik:RadButton>
+        </StackPanel>
+        <telerik:RadGridView Grid.Row="1"
+                             x:Name="gridViewDocuments"
+                             SelectionChanged="GridViewDocuments_SelectionChanged">
+            <telerik:RadGridView.Columns>
+                <telerik:GridViewDataColumn Header="Номер" DataMemberBinding="{Binding Number}"/>
+                <telerik:GridViewDataColumn Header="Дата" DataMemberBinding="{Binding Date}"/>
+                <telerik:GridViewDataColumn Header="Сумма" DataMemberBinding="{Binding Sum}"/>
+                <telerik:GridViewDataColumn Header="Примечание" DataMemberBinding="{Binding Note}"/>
+            </telerik:RadGridView.Columns>
+        </telerik:RadGridView>
+        <StackPanel Grid.Row="2" VerticalAlignment="Center"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+            <telerik:RadButton x:Name="btnAddPosition"
+                               Click="BtnAddPosition_Click">
+                <telerik:RadButton.Content>
+                    <Image Source="../Resources/Images/add.png"/>
+                </telerik:RadButton.Content>
+            </telerik:RadButton>
+            <telerik:RadButton x:Name="btnEditPosition"
+                               Click="BtnEditPosition_Click">
+                <telerik:RadButton.Content>
+                    <Image Source="../Resources/Images/edit.png"/>
+                </telerik:RadButton.Content>
+            </telerik:RadButton>
+            <telerik:RadButton x:Name="btnDeletePosition">
+                <Button.Content>
+                    <Image Source="../Resources/Images/delete.png"/>
+                </Button.Content>
+            </telerik:RadButton>
+        </StackPanel>
+        <telerik:RadGridView Grid.Row="3"
+                             x:Name="gridViewPositions"
+                             Margin="0,0,0,10"
+                             SelectionChanged="GridViewPositions_SelectionChanged">
+            <telerik:RadGridView.Columns>
+                <telerik:GridViewDataColumn Header="Номер" DataMemberBinding="{Binding Number}"/>
+                <telerik:GridViewDataColumn Header="Наименование" DataMemberBinding="{Binding Name}"/>
+                <telerik:GridViewDataColumn Header="Сумма" DataMemberBinding="{Binding Sum}"/>
+            </telerik:RadGridView.Columns>
+        </telerik:RadGridView>
+    </Grid>
+</Page>
