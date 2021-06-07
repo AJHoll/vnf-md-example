@@ -25,7 +25,7 @@ namespace WPFClient.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("192.168.100.4")]
+        [global::System.Configuration.DefaultSettingValueAttribute("localhost")]
         public string host {
             get {
                 return ((string)(this["host"]));

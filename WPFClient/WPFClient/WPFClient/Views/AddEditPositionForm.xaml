@@ -69,7 +69,8 @@
                 <telerik:RadButton x:Name="btnSaveChanges"
                                    VerticalAlignment="Center"
                                    Margin="10,0"
-                                   Padding="5"/>
+                                   Padding="5"
+                                   Click="BtnSaveChanges_Click"/>
             </StackPanel>
         </Grid>
     </Grid>

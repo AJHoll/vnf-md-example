@@ -23,14 +23,17 @@ namespace WPFClient.Connection
 
         public static NpgsqlConnection GetConnection(string login, string password)
         {
+            if (Connection != null)
+                if (Connection.State == System.Data.ConnectionState.Open)
+                    return Connection;
+
             Server = Properties.Settings.Default.host;
             Port = Properties.Settings.Default.port;
             DataBase = Properties.Settings.Default.dbName;
             ConnectionString = String.Format(@"Server={0};Port={1};DataBase={2};UID={3};PWD={4}",
                 Server, Port, DataBase, login, password);
             Connection = new NpgsqlConnection(ConnectionString);
-            if (Connection.State == System.Data.ConnectionState.Open)
-                return Connection;
+
             try
             {
                 Connection.Open();
@@ -38,7 +41,7 @@ namespace WPFClient.Connection
             }
             catch(Exception e)
             {
-                return null;
+                throw e;
             }
         }
     }

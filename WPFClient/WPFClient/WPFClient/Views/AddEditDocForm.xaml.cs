@@ -100,8 +100,8 @@ namespace WPFClient.Views
                         using (NpgsqlDataReader reader = command.ExecuteReader())
                         {
                             reader.Read();
-                            var test = reader.GetInt32(0);
-                            return test;
+                            var id = reader.GetInt32(0);
+                            return id;
                         }
                     }
                 }

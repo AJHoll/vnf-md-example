@@ -33,24 +33,31 @@ namespace WPFClient
             var login = tbLogin.Text;
             var password = tbPassword.Password;
             //если соединение создано
-            if (GetConnection(login, password))
+            try
             {
-                NavigationService.GetNavigationService(this).Navigate
-                    (new Uri("Views/DocsWindow.xaml", UriKind.RelativeOrAbsolute));
+                var isGetConnection = GetConnection(login, password);
+
+                NavigationService.GetNavigationService(this).Navigate(new Uri("Views/DocsWindow.xaml", UriKind.RelativeOrAbsolute));
             }
-            else
+            catch(Exception err)
             {
-                MessageBox.Show("Неверный логин или пароль", "ERROR", MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                MessageBox.Show(err.ToString(), "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
                 tbPassword.Password = "";
             }
         }
 
         private static bool GetConnection(string log, string passw)
         {
-            var connection = Connection.PgConnection.GetConnection(log, passw);
-            if (connection != null)
-                return true;
+            try
+            {
+                var connection = Connection.PgConnection.GetConnection(log, passw);
+                if (connection != null)
+                    return true;
+            }
+            catch(Exception err)
+            {
+                throw err;
+            }
             return false;
         }
     }

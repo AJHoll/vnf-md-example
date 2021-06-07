@@ -46,6 +46,7 @@
         </StackPanel>
         <telerik:RadGridView Grid.Row="1"
                              x:Name="gridViewDocuments"
+                             IsFilteringAllowed="False"
                              SelectionChanged="GridViewDocuments_SelectionChanged">
             <telerik:RadGridView.Columns>
                 <telerik:GridViewDataColumn Header="Номер" DataMemberBinding="{Binding Number}"/>
@@ -69,7 +70,8 @@
                     <Image Source="../Resources/Images/edit.png"/>
                 </telerik:RadButton.Content>
             </telerik:RadButton>
-            <telerik:RadButton x:Name="btnDeletePosition">
+            <telerik:RadButton x:Name="btnDeletePosition"
+                               Click="BtnDeletePosition_Click">
                 <Button.Content>
                     <Image Source="../Resources/Images/delete.png"/>
                 </Button.Content>
@@ -78,6 +80,7 @@
         <telerik:RadGridView Grid.Row="3"
                              x:Name="gridViewPositions"
                              Margin="0,0,0,10"
+                             IsFilteringAllowed="False"
                              SelectionChanged="GridViewPositions_SelectionChanged">
             <telerik:RadGridView.Columns>
                 <telerik:GridViewDataColumn Header="Номер" DataMemberBinding="{Binding Number}"/>

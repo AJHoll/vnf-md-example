@@ -30,10 +30,12 @@ namespace WPFClient.Views
                                                 " from cmn_doc.doc_item" +
                                                 " where id_doc = :docId";
         private string sqlDeleteDocument = "select cmn_doc.doc__delete_record(:docId);";
-        public static Document SelectedDocument;
-        public static Position SelectedPosition;
-        public static bool isAddDoc = false;
-        public static bool isAddPos = false;
+        private string sqlDeletePosition = "select cmn_doc.doc_item__delete_record(:posId);" +
+                                           "select cmn_doc.doc__after_edit(:docId);";
+        public static Document SelectedDocument { get; set; } //выбранный в GridView документ
+        public static Position SelectedPosition; //выбранная в GridView позиция
+        public static bool isAddDoc = false; //создаётся новый документ
+        public static bool isAddPos = false; //создаётся новая позиция
         public DocsWindow()
         {
             connection = PgConnection.Connection;
@@ -143,6 +145,10 @@ namespace WPFClient.Views
             return allPositions;
         }
 
+        /// <summary>
+        /// Функция удаления документа
+        /// </summary>
+        /// <param name="doc"></param>
         private void DeleteDocument(Document doc)
         {
             if (connection != null)
@@ -157,7 +163,34 @@ namespace WPFClient.Views
                 }
                 catch(Exception e)
                 {
-                    MessageBox.Show($"Не удалось удалить документ '{doc.Number}'. {e.Message}");
+                    MessageBox.Show($"Не удалось удалить документ '{doc.Number}'." +
+                        $"\r\n{e.Message}");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Функция удаления позиции
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <param name="doc"></param>
+        private void DeletePosition(Position pos, Document doc)
+        {
+            if (connection != null)
+            {
+                try
+                {
+                    using (NpgsqlCommand command = new NpgsqlCommand(sqlDeletePosition, connection))
+                    {
+                        command.Parameters.AddWithValue("posId", pos.Id);
+                        command.Parameters.AddWithValue("docId", doc.Id);
+                        command.ExecuteNonQuery();
+                    }
+                }
+                catch(Exception e)
+                {
+                    MessageBox.Show($"Не удалось удалить позицию '{pos.Number}'." +
+                        $"\r\n{e.Message}");
                 }
             }
         }
@@ -257,6 +290,38 @@ namespace WPFClient.Views
                 btnEditDocument.IsEnabled = true;
                 //смена выбранного объекта
                 SelectedPosition = (Position)gridViewPositions.SelectedItem;
+            }
+        }
+
+        /// <summary>
+        /// Событие кнопки "Удалить позицию(и)"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnDeletePosition_Click(object sender, RoutedEventArgs e)
+        {
+            if (gridViewPositions.SelectedItems.Count > 0)
+            {
+                //точно ли удалить?
+                MessageBoxResult result = MessageBox.Show("Удалить выбранные позиции?",
+                    "Message", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    var selectedPositions = gridViewPositions.SelectedItems.ToList().Cast<Position>().ToList();
+                    foreach (var selectedPosition in selectedPositions)
+                    {
+                        //удалить выбранный документ
+                        DeletePosition(selectedPosition, SelectedDocument);
+                    }
+                    btnEditPosition.IsEnabled = true;
+                    //обнуляем выбранную позицию
+                    SelectedPosition = null; 
+                    //получение позиций по id выбранного документа
+                    var allPositions = GetPositionsByDocId(SelectedDocument.Id);
+                    //загрузка данных в gridViewPositions
+                    gridViewPositions.ItemsSource = allPositions;
+                    UpdateGridViewDocuments();
+                }
             }
         }
     }
